@@ -1,0 +1,157 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ItemType {
+  LOST
+  FOUND
+}
+
+enum ItemStatus {
+  LOST
+  FOUND
+  RETURNED
+}
+
+enum ItemCategory {
+  ELECTRONICS    // อุปกรณ์อิเล็กทรอนิกส์ เช่น โทรศัพท์ Laptop หูฟัง
+  BAG            // กระเป๋า เช่น กระเป๋าเรียน กระเป๋าสตางค์
+  DOCUMENT       // เอกสารและบัตร เช่น บัตรนักศึกษา บัตรประชาชน
+  KEY            // กุญแจ เช่น กุญแจบ้าน กุญแจรถ Key Card
+  PERSONAL_ITEM  // ของใช้ส่วนตัว เช่น แว่นตา นาฬิกา เครื่องประดับ
+  BOOK           // หนังสือและอุปกรณ์การเรียน
+  CLOTHING       // เสื้อผ้า เครื่องแต่งกาย
+  VEHICLE        // จักรยาน หมวกกันน็อก อุปกรณ์ยานพาหนะ
+  FOOD_CONTAINER // กล่องข้าว ขวดน้ำ แก้วน้ำ
+  OTHER          // อื่น ๆ
+}
+
+enum ClaimStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum NotificationType {
+  CLAIM_REQUESTED
+  CLAIM_APPROVED
+  CLAIM_REJECTED
+  ITEM_RETURNED
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  password    String
+  name        String
+  phone       String?
+  faculty     String?
+  studentId   String?
+  avatarUrl   String?
+  role        Role     @default(USER)
+  isBanned    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  items         Item[]         @relation("UserItems")
+  favorites     Favorite[]
+  claims        Claim[]        @relation("UserClaims")
+  notifications Notification[]
+
+  @@index([email])
+  @@map("users")
+}
+
+model Item {
+  id          String       @id @default(cuid())
+  title       String
+  description String
+  type        ItemType
+  status      ItemStatus   @default(LOST)
+  category    ItemCategory
+  color       String?
+  brand       String?
+  contact     String?
+  location    String
+  latitude    Float?
+  longitude   Float?
+  date        DateTime
+  images      String[]     @default([])
+
+  ownerId     String
+  owner       User         @relation("UserItems", fields: [ownerId], references: [id], onDelete: Cascade)
+
+  favorites   Favorite[]
+  claims      Claim[]
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([type, status])
+  @@index([category])
+  @@index([ownerId])
+  @@index([createdAt])
+  @@index([latitude, longitude])
+  @@map("items")
+}
+
+model Favorite {
+  id     String @id @default(cuid())
+  userId String
+  itemId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, itemId])
+  @@map("favorites")
+}
+
+model Claim {
+  id       String      @id @default(cuid())
+  itemId   String
+  userId   String
+  reason   String
+  evidence String[]    @default([])
+  status   ClaimStatus @default(PENDING)
+
+  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  user User @relation("UserClaims", fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([itemId])
+  @@index([userId])
+  @@map("claims")
+}
+
+model Notification {
+  id      String            @id @default(cuid())
+  userId  String
+  type    NotificationType
+  title   String
+  message String
+  isRead  Boolean           @default(false)
+  link    String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, isRead])
+  @@map("notifications")
+}
