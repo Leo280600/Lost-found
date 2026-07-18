@@ -34,7 +34,7 @@ export function LoginForm() {
     }
     await refresh(); // updates Navbar + every component reading useAuth() right away
     toast.success("เข้าสู่ระบบสำเร็จ");
-    router.push(params.get("redirect") || "/dashboard");
+    router.push(params.get("redirect") || "/");
     router.refresh();
   };
 

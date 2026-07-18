@@ -67,4 +67,3 @@ See [`docs/ER_DIAGRAM.md`](docs/ER_DIAGRAM.md) for the entity-relationship diagr
 - Basic in-memory rate limiting on register/login/upload (swap for Upstash Redis in multi-instance production, see SETUP.md)
 - Prisma's parameterized queries prevent SQL injection by default
 - React auto-escapes output, mitigating XSS; avoid `dangerouslySetInnerHTML` with user content
-"# Lost-found" 

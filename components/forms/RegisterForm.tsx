@@ -8,11 +8,9 @@ import { toast } from "sonner";
 import { registerSchema, type RegisterInput } from "@/lib/validations";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import { useAuth } from "@/hooks/useAuth";
 
 export function RegisterForm() {
   const router = useRouter();
-  const { refresh } = useAuth();
   const [serverError, setServerError] = useState<string | null>(null);
 
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<RegisterInput>({
@@ -31,10 +29,8 @@ export function RegisterForm() {
       setServerError(json.message ?? "สมัครสมาชิกไม่สำเร็จ");
       return;
     }
-    await refresh();
-    toast.success("สมัครสมาชิกสำเร็จ");
-    router.push("/dashboard");
-    router.refresh();
+    toast.success("สมัครสมาชิกสำเร็จ กรุณาเข้าสู่ระบบ");
+    router.push("/login");
   };
 
   return (

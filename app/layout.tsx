@@ -12,8 +12,8 @@ const display = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-displa
 const body = Inter({ subsets: ["latin"], variable: "--font-body" });
 
 export const metadata: Metadata = {
-  title: "Lost & Found Hub — ระบบประกาศของหายในมหาวิทยาลัยแม่โจ้",
-  description: "แพลตฟอร์มแจ้งของหายและของที่พบภายในมหาวิทยาลัยแม่โจ้ ค้นหา แจ้งเตือน และขอรับของคืนได้อย่างปลอดภัย",
+  title: "Lost & Found Hub — ระบบประกาศของหายในมหาวิทยาลัย",
+  description: "แพลตฟอร์มแจ้งของหายและของที่พบภายในมหาวิทยาลัย ค้นหา แจ้งเตือน และขอรับของคืนได้อย่างปลอดภัย",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

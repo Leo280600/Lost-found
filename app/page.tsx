@@ -37,7 +37,7 @@ export default async function HomePage() {
       <section className="relative overflow-hidden rounded-3xl">
         <div className="glass relative flex flex-col items-center gap-6 rounded-3xl px-6 py-16 text-center sm:py-24">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700 dark:bg-brand-900/40 dark:text-brand-300">
-            <Sparkles size={12} /> ระบบกลางแจ้งของหาย-ของพบในมหาวิทยาลัยแม่โจ้
+            <Sparkles size={12} /> ระบบกลางแจ้งของหาย-ของพบในมหาวิทยาลัย
           </span>
           <h1 className="max-w-2xl font-[var(--font-display)] text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl dark:text-white">
             หาของหาย <span className="text-brand-600">เจอเร็วขึ้น</span> ด้วย Lost &amp; Found Hub

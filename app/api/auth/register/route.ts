@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { registerSchema } from "@/lib/validations";
-import { hashPassword, signToken, setAuthCookie } from "@/lib/auth";
+import { hashPassword } from "@/lib/auth";
 import { created, fail } from "@/lib/api-response";
 import { rateLimit, getClientKey } from "@/lib/rate-limit";
 
@@ -23,9 +23,8 @@ export async function POST(req: NextRequest) {
     data: { name, email, password: hashed, phone, faculty, studentId },
   });
 
-  const token = await signToken({ userId: user.id, email: user.email, role: user.role });
-  await setAuthCookie(token);
-
+  // Intentionally not signing a token / setting the auth cookie here —
+  // registering creates the account but does not log the user in.
   const { password: _pw, ...safeUser } = user;
   return created(safeUser);
 }
